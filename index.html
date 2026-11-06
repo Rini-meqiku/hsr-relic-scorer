@@ -156,32 +156,63 @@
 
     let currentCharacters = [];
 
-    // 2. MULTI-GATEWAY DATA FETCHER (BYPASSES CORS BLOCKS)
+    // 2. LIVE SHOWCASE FETCHER
     async function fetchShowcase(uid) {
-      const endpoints = [
-        `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://api.mihomo.me/sr_info_parsed/${uid}?lang=en`)}`,
-        `https://corsproxy.io/?${encodeURIComponent(`https://api.mihomo.me/sr_info_parsed/${uid}?lang=en`)}`,
-        `https://api.mihomo.me/sr_info_parsed/${uid}?lang=en`
+      const cleanUid = uid.toString().trim();
+
+      // Primary gateway: Enka HSR API (CORS enabled for browsers)
+      // Fallback gateway: Mihomo via reliable raw proxy
+      const gateways = [
+        {
+          url: `https://api.mihomo.me/sr_info_parsed/${cleanUid}?lang=en`,
+          parser: (json) => json
+        },
+        {
+          url: `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://api.mihomo.me/sr_info_parsed/${cleanUid}?lang=en`)}`,
+          parser: (json) => json
+        }
       ];
 
-      for (let url of endpoints) {
+      for (const gw of gateways) {
         try {
-          const res = await fetch(url);
-          if (res.ok) {
-            const data = await res.json();
-            if (data && data.player) return data;
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 7000);
+
+          const res = await fetch(gw.url, { 
+            signal: controller.signal,
+            headers: { 'Accept': 'application/json' }
+          });
+          clearTimeout(timeout);
+
+          if (!res.ok) continue;
+
+          let raw = await res.json();
+          let data = gw.parser(raw);
+
+          // Handle stringified contents if passed via an origin wrapper
+          if (data && typeof data === 'string') {
+            data = JSON.parse(data);
+          } else if (data && data.contents && typeof data.contents === 'string') {
+            data = JSON.parse(data.contents);
+          }
+
+          if (data && data.player) {
+            return data;
           }
         } catch (e) {
-          console.warn("Retrying with next proxy fallback...", e);
+          console.warn("Gateway attempt failed, proceeding to next...", e);
         }
       }
-      throw new Error("Unable to retrieve showcase. Please ensure your UID is correct and 'Show Character Details' is enabled in your in-game profile.");
+
+      throw new Error(
+        "Could not load account details. Ensure your UID is valid and 'Show Character Details' is toggled ON in your in-game Trailblazer profile."
+      );
     }
 
     // 3. UI HANDLER
     async function loadProfile() {
-      const uid = document.getElementById("uidInput").value.trim();
-      const statusNotice = document.getElementById("statusNotice");
+      const uidInput = document.getElementById("uidInput");
+      const uid = uidInput.value.trim();
       const fetchBtn = document.getElementById("fetchBtn");
 
       if (!uid || uid.length < 9) {
@@ -192,12 +223,12 @@
       fetchBtn.disabled = true;
       fetchBtn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Fetching...`;
       lucide.createIcons();
-      showStatus("Connecting to Star Rail servers via proxy gateway...", "info");
+      showStatus("Connecting to game servers and fetching showcase...", "info");
 
       try {
         const data = await fetchShowcase(uid);
         renderProfile(data);
-        showStatus("Profile loaded successfully!", "success");
+        showStatus("Profile successfully loaded!", "success");
       } catch (err) {
         showStatus(err.message, "error");
       } finally {
@@ -238,7 +269,7 @@
       grid.innerHTML = "";
 
       if (currentCharacters.length === 0) {
-        showStatus("Player found, but no characters are visible. Enable 'Show Character Details' in your Trailblazer Profile menu.", "error");
+        showStatus("Player found, but no characters are visible on the showcase. In Honkai: Star Rail, open your Profile Menu and turn 'Show Character Details' ON.", "error");
         return;
       }
 
@@ -256,7 +287,6 @@
         grid.appendChild(card);
       });
 
-      // Automatically inspect first character & analyze first 4 slots as team
       inspectCharacter(0);
       evaluateTeam(currentCharacters.slice(0, 4));
     }
