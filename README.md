@@ -1,1 +1,0 @@
-# hsr-relic-scorer
