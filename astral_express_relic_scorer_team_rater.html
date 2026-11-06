@@ -1,434 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Astral Relic Scorer & Team Rater | Honkai: Star Rail</title>
-  
-  <!-- Tailwind CSS CDN -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Astral Express | HSR Relic Scorer & Team Builder</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            hsr: {
-              dark: '#0c0e17',
-              card: '#141829',
-              cardHover: '#1c223a',
-              border: 'rgba(212, 175, 55, 0.25)',
-              gold: '#ffd166',
-              goldGlow: '#e5b842',
-              cyan: '#00f0ff',
-              purple: '#9d4edd',
-              tierWTF: '#ff007f',
-              tierSS: '#ff5400',
-              tierS: '#ffd166',
-              tierA: '#70e000',
-              tierB: '#00b4d8',
-              tierC: '#6c757d'
-            }
-          },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-          },
-          boxShadow: {
-            'neon-gold': '0 0 15px rgba(255, 209, 102, 0.35)',
-            'neon-cyan': '0 0 15px rgba(0, 240, 255, 0.35)',
-            'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
-          }
-        }
-      }
-    }
-  </script>
-
-  <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
-
   <style>
-    /* Starfield and cosmic nebula background */
-    body {
-      background-color: #080911;
-      background-image: 
-        radial-gradient(circle at 15% 20%, rgba(157, 78, 221, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 85% 75%, rgba(0, 240, 255, 0.12) 0%, transparent 45%),
-        radial-gradient(circle at 50% 50%, rgba(255, 209, 102, 0.05) 0%, transparent 60%);
-      background-attachment: fixed;
-      color: #e2e8f0;
-    }
-
-    /* Custom scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #0f1322;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #2a3356;
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #ffd166;
-    }
-
-    .glass-card {
-      background: rgba(20, 24, 41, 0.75);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 209, 102, 0.15);
-    }
-
-    .glass-card:hover {
-      border-color: rgba(255, 209, 102, 0.4);
-    }
-
-    .gold-gradient-text {
-      background: linear-gradient(135deg, #fff3b0 0%, #ffd166 50%, #e09f3e 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .cyan-gradient-text {
-      background: linear-gradient(135deg, #a0f0ed 0%, #00f0ff 50%, #0077b6 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    /* Star shimmer effect */
-    @keyframes pulseGlow {
-      0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,209,102,0.6)); }
-      50% { opacity: 1; filter: drop-shadow(0 0 10px rgba(255,209,102,0.9)); }
-    }
-    .glow-pulse {
-      animation: pulseGlow 3s infinite ease-in-out;
-    }
+    body { background-color: #0b0e14; color: #f1f5f9; font-family: system-ui, sans-serif; }
+    .glass-card { background: rgba(18, 24, 38, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .gold-glow { text-shadow: 0 0 12px rgba(234, 179, 8, 0.5); }
   </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans selection:bg-yellow-500 selection:text-black">
+<body class="min-h-screen p-4 md:p-8">
+  <div class="max-w-6xl mx-auto space-y-6">
 
-  <!-- TOP HEADER / NAV -->
-  <header class="border-b border-hsr-border/30 bg-hsr-dark/80 backdrop-blur sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-500 via-purple-600 to-cyan-400 p-[2px] shadow-neon-gold flex items-center justify-center">
-          <div class="w-full h-full bg-hsr-dark rounded-[10px] flex items-center justify-center">
-            <i data-lucide="sparkles" class="w-5 h-5 text-hsr-gold"></i>
-          </div>
-        </div>
-        <div>
-          <h1 class="text-lg md:text-xl font-bold tracking-wider gold-gradient-text uppercase">Astral Relic Scorer</h1>
-          <p class="text-xs text-slate-400">Honkai: Star Rail Showcase & Team Analyzer</p>
-        </div>
+    <!-- Header -->
+    <header class="glass-card rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-bold tracking-tight text-yellow-400 gold-glow flex items-center gap-3">
+          <i data-lucide="compass" class="w-8 h-8"></i>
+          Astral Express Relic Scorer
+        </h1>
+        <p class="text-slate-400 text-sm mt-1">Live In-Game Showcase Profiler & Team Synergy Engine</p>
       </div>
 
-      <!-- Quick Preset Buttons -->
-      <div class="flex items-center gap-2 flex-wrap text-xs">
-        <span class="text-slate-400 hidden sm:inline">Try Demo Profiles:</span>
-        <button onclick="loadPreset('whale')" class="px-2.5 py-1.5 rounded-lg bg-purple-950/60 border border-purple-500/40 text-purple-200 hover:bg-purple-900/60 transition">
-          👑 E6 Acheron Hyper
-        </button>
-        <button onclick="loadPreset('break')" class="px-2.5 py-1.5 rounded-lg bg-emerald-950/60 border border-emerald-500/40 text-emerald-200 hover:bg-emerald-900/60 transition">
-          🔥 Firefly SuperBreak
-        </button>
-        <button onclick="loadPreset('fua')" class="px-2.5 py-1.5 rounded-lg bg-amber-950/60 border border-amber-500/40 text-amber-200 hover:bg-amber-900/60 transition">
-          ⚡ Feixiao FUA
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- MAIN CONTAINER -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 space-y-6">
-
-    <!-- SEARCH & UID BAR -->
-    <section class="glass-card rounded-2xl p-5 shadow-glass">
-      <div class="flex flex-col md:flex-row items-center gap-4">
-        
-        <div class="relative w-full md:w-96 flex-1">
-          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-            <i data-lucide="search" class="w-5 h-5"></i>
-          </div>
-          <input 
-            type="text" 
-            id="uidInput" 
-            placeholder="Enter Trailblazer UID (e.g. 800333171, 700123456)..."
-            maxlength="10"
-            class="w-full pl-11 pr-24 py-3 bg-hsr-dark/90 border border-hsr-border rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-hsr-gold focus:ring-1 focus:ring-hsr-gold transition text-sm font-mono tracking-wide"
-            oninput="detectRegion(this.value)"
-            onkeydown="if(event.key === 'Enter') fetchProfile()"
-          />
-          <span id="regionBadge" class="absolute right-3 top-2.5 px-2 py-1 rounded bg-slate-800 text-xs text-slate-400 border border-slate-700 hidden">
-            Asia
-          </span>
-        </div>
-
+      <!-- UID Input Field -->
+      <div class="flex items-center gap-2 w-full md:w-auto">
+        <input 
+          id="uidInput" 
+          type="text" 
+          placeholder="Enter 9-digit UID (e.g. 800333171)" 
+          class="bg-slate-900/90 border border-slate-700 text-white px-4 py-2.5 rounded-xl focus:outline-none focus:border-yellow-400 w-full md:w-72 text-sm"
+        />
         <button 
           id="fetchBtn" 
-          onclick="fetchProfile()"
-          class="w-full md:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 via-hsr-gold to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-black font-semibold text-sm shadow-neon-gold flex items-center justify-center gap-2 active:scale-95 transition"
+          onclick="loadProfile()" 
+          class="bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-slate-950 font-semibold px-5 py-2.5 rounded-xl transition flex items-center gap-2 text-sm shadow-lg shadow-yellow-500/20 shrink-0"
         >
-          <i data-lucide="download-cloud" class="w-4 h-4"></i>
-          <span>Fetch Profile</span>
+          <i data-lucide="search" class="w-4 h-4"></i>
+          Fetch
         </button>
-
       </div>
+    </header>
 
-      <div class="mt-3 flex flex-wrap items-center justify-between text-xs text-slate-400 gap-2 pt-2 border-t border-slate-800">
-        <div class="flex items-center gap-1.5">
-          <i data-lucide="info" class="w-3.5 h-3.5 text-hsr-cyan"></i>
-          <span>Fetches characters currently in your in-game <strong>Showcase</strong>. Ensure <em>"Show Details"</em> is enabled in your Trailblazer profile.</span>
+    <!-- Error / Status Notice -->
+    <div id="statusNotice" class="hidden glass-card rounded-xl p-4 text-sm border-l-4"></div>
+
+    <!-- Player Overview -->
+    <section id="playerCard" class="hidden glass-card rounded-2xl p-6 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-full bg-slate-800 border-2 border-yellow-500/50 flex items-center justify-center text-yellow-400 font-bold text-xl" id="playerInitial">
+          ?
         </div>
-        <div id="statusIndicator" class="flex items-center gap-2 text-slate-400">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-          <span>API Gateway Active</span>
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 id="playerName" class="text-xl font-bold text-white">Player</h2>
+            <span id="playerRegion" class="text-xs bg-slate-800 border border-slate-700 px-2 py-0.5 rounded text-slate-300">NA</span>
+          </div>
+          <p id="playerDetails" class="text-xs text-slate-400 mt-0.5">Trailblaze Lvl -- | World Lvl --</p>
         </div>
+      </div>
+      <div class="text-xs text-slate-400 bg-slate-900/60 p-3 rounded-xl border border-slate-800 max-w-sm">
+        ⚠️ <strong>Note:</strong> Only characters pinned to your in-game <strong>Trailblazer Profile Showcase</strong> with <em>"Show Details"</em> turned ON can be scored.
       </div>
     </section>
 
-    <!-- PLAYER PROFILE BANNER -->
-    <section id="playerBanner" class="hidden glass-card rounded-2xl p-5 border border-hsr-border/40 relative overflow-hidden">
-      <div class="absolute -right-16 -top-16 w-56 h-56 bg-hsr-gold/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="flex flex-col md:flex-row items-center justify-between gap-5 relative z-10">
-        
-        <div class="flex items-center gap-4 w-full md:w-auto">
-          <div class="relative">
-            <img id="playerAvatar" src="https://placehold.co/80x80/1a1e36/ffd166?text=TB" alt="Avatar" class="w-16 h-16 md:w-20 md:h-20 rounded-2xl border-2 border-hsr-gold object-cover shadow-neon-gold bg-slate-900" onerror="this.src='https://placehold.co/80x80/1a1e36/ffd166?text=TB'"/>
-            <span id="playerEquilibrium" class="absolute -bottom-2 -right-1 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-purple-900 border border-purple-400 text-purple-200">
-              EQ 6
-            </span>
-          </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <h2 id="playerName" class="text-xl md:text-2xl font-bold text-white tracking-wide">Trailblazer</h2>
-              <span id="playerServer" class="text-xs px-2 py-0.5 rounded bg-slate-800 text-hsr-cyan border border-cyan-500/30">Asia</span>
-            </div>
-            <p id="playerSignature" class="text-xs text-slate-400 italic max-w-md mt-1 truncate">May This Journey Lead Us Starward ✨</p>
-            <div class="flex items-center gap-4 text-xs text-slate-300 mt-2">
-              <span>Trailblaze Lvl: <strong id="playerLevel" class="text-hsr-gold font-bold text-sm">70</strong></span>
-              <span>Showcased: <strong id="charCount" class="text-hsr-cyan">4</strong> Characters</span>
-            </div>
-          </div>
+    <!-- Main Grid: Character Relics & Team Rater -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- Left 2 Cols: Character List & Relic Scores -->
+      <div class="lg:col-span-2 space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="font-semibold text-lg text-slate-200 flex items-center gap-2">
+            <i data-lucide="shield-check" class="w-5 h-5 text-yellow-400"></i>
+            Showcase Characters (<span id="charCount">0</span>)
+          </h3>
+          <span class="text-xs text-slate-400">Click a character to inspect relics</span>
         </div>
 
-        <!-- Mode Toggle Tabs -->
-        <div class="flex items-center gap-2 bg-hsr-dark/80 p-1.5 rounded-xl border border-slate-700/60 w-full md:w-auto justify-center">
-          <button id="tabRosterBtn" onclick="switchMainTab('roster')" class="px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 bg-hsr-gold text-black shadow-sm transition">
-            <i data-lucide="layers" class="w-4 h-4"></i> Character Relic Scorer
-          </button>
-          <button id="tabTeamBtn" onclick="switchMainTab('team')" class="px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 text-slate-300 hover:text-white transition">
-            <i data-lucide="users" class="w-4 h-4"></i> Team Rating & Synergy
-          </button>
-        </div>
+        <div id="characterGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
 
+        <!-- Selected Character Relic Details -->
+        <div id="relicContainer" class="hidden glass-card rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+              <h4 id="inspectName" class="text-xl font-bold text-white">Character</h4>
+              <p id="inspectPath" class="text-xs text-yellow-400">Path / Element</p>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-slate-400">Average Build Score</span>
+              <p id="inspectAvgScore" class="text-2xl font-black text-amber-400">0.0</p>
+            </div>
+          </div>
+          <div id="relicList" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+        </div>
       </div>
-    </section>
 
-    <!-- VIEW 1: CHARACTER ROSTER & RELIC SCORING -->
-    <div id="rosterView" class="space-y-6">
-      <div class="flex items-center justify-between">
-        <h3 class="text-base font-bold text-slate-200 flex items-center gap-2">
-          <i data-lucide="shield-check" class="w-5 h-5 text-hsr-gold"></i>
-          <span>Showcase Characters & Relic Scores</span>
+      <!-- Right Col: Team Synergy & Rating -->
+      <div class="space-y-4">
+        <h3 class="font-semibold text-lg text-slate-200 flex items-center gap-2">
+          <i data-lucide="users" class="w-5 h-5 text-yellow-400"></i>
+          Active Team Analyzer
         </h3>
-        <span class="text-xs text-slate-400">Click any card to inspect individual relics & roll values</span>
-      </div>
 
-      <!-- Character Card Grid -->
-      <div id="charactersGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <!-- Rendered dynamically -->
-      </div>
-    </div>
-
-    <!-- VIEW 2: TEAM RATING & SYNERGY ANALYZER -->
-    <div id="teamView" class="hidden space-y-6">
-      
-      <!-- Team Builder Bar -->
-      <div class="glass-card rounded-2xl p-5 border border-hsr-border/30">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-800">
-          <div>
-            <h3 class="text-lg font-bold text-white flex items-center gap-2">
-              <i data-lucide="swords" class="w-5 h-5 text-hsr-cyan"></i>
-              <span>Interactive Team Evaluator</span>
-            </h3>
-            <p class="text-xs text-slate-400">Select 4 units from your showcase to rate synergy, skill point economy, and archetype strength</p>
+        <div class="glass-card rounded-2xl p-5 space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-xs text-slate-400 uppercase tracking-wider">Synergy Score</span>
+            <span id="teamScore" class="text-2xl font-black text-yellow-400">--</span>
           </div>
-          <button onclick="copyTeamSummary()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-xs text-slate-200 flex items-center gap-2 self-start md:self-auto transition">
-            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-            <span id="copyBtnText">Copy Team Report</span>
-          </button>
-        </div>
 
-        <!-- 4 Team Slots -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 my-5" id="teamSlotsContainer">
-          <!-- 4 slots populated dynamically -->
-        </div>
+          <div id="teamSlots" class="grid grid-cols-4 gap-2 text-center text-xs">
+            <div class="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-500">Slot 1</div>
+            <div class="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-500">Slot 2</div>
+            <div class="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-500">Slot 3</div>
+            <div class="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-500">Slot 4</div>
+          </div>
 
-        <!-- Character Selection Tray -->
-        <div class="mt-4">
-          <p class="text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">Available Roster (Click to toggle into team):</p>
-          <div id="rosterSelectionTray" class="flex flex-wrap gap-2">
-            <!-- Roster pills populated dynamically -->
+          <div class="space-y-2 border-t border-slate-800 pt-3">
+            <span class="text-xs font-semibold text-slate-300">Tactical Assessment</span>
+            <ul id="teamNotes" class="text-xs text-slate-400 space-y-1.5 list-disc list-inside">
+              <li>Enter a UID to evaluate your showcase team.</li>
+            </ul>
           </div>
         </div>
       </div>
-
-      <!-- TEAM EVALUATION RESULTS -->
-      <div id="teamResultsCard" class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        
-        <!-- Score Card -->
-        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between border-t-2 border-t-hsr-gold">
-          <div>
-            <div class="flex items-center justify-between">
-              <span class="text-xs uppercase tracking-wider text-slate-400">Synergy Index</span>
-              <span id="teamArchetypeTag" class="text-xs px-2.5 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/40 font-mono">
-                Super Break
-              </span>
-            </div>
-            <div class="my-5 flex items-baseline justify-center gap-2">
-              <span id="teamScoreNumber" class="text-6xl font-black gold-gradient-text tracking-tight">88</span>
-              <span class="text-xl text-slate-400 font-bold">/100</span>
-            </div>
-            <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden p-0.5 border border-slate-700">
-              <div id="teamScoreBar" class="bg-gradient-to-r from-amber-500 to-yellow-400 h-full rounded-full transition-all duration-700" style="width: 88%"></div>
-            </div>
-          </div>
-
-          <div class="pt-4 border-t border-slate-800/80 mt-5 space-y-2 text-xs">
-            <div class="flex justify-between text-slate-300">
-              <span>Avg Relic Quality:</span>
-              <strong id="teamAvgRelicTier" class="text-hsr-gold font-bold">SS (4.32 Avg Rolls)</strong>
-            </div>
-            <div class="flex justify-between text-slate-300">
-              <span>SP Generation:</span>
-              <strong id="teamSPEconomy" class="text-emerald-400 font-bold">+1.2 Neutral / Fast</strong>
-            </div>
-            <div class="flex justify-between text-slate-300">
-              <span>Sustain Rating:</span>
-              <strong id="teamSustainRating" class="text-cyan-300 font-bold">Safe (Abundance / Pres.)</strong>
-            </div>
-          </div>
-        </div>
-
-        <!-- Breakdown & Archetype Feedback -->
-        <div class="glass-card rounded-2xl p-6 lg:col-span-2 space-y-4">
-          <h4 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-            <i data-lucide="zap" class="w-4 h-4 text-hsr-gold"></i>
-            <span>Combat Analysis & Recommendations</span>
-          </h4>
-
-          <div id="teamFeedbackList" class="space-y-2.5">
-            <!-- Dynamic feedback bullets -->
-          </div>
-
-          <div class="pt-3 border-t border-slate-800">
-            <h5 class="text-xs font-semibold text-slate-400 mb-2">SPEED TUNING & ACTION ORDER ADVICE:</h5>
-            <div id="speedTuningAdvice" class="p-3 rounded-xl bg-hsr-dark/60 border border-slate-700/60 text-xs text-slate-300 leading-relaxed">
-              Calculates target speed breakpoints (134, 143, 160.1 SPD) and action priority.
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-
-  </main>
-
-  <!-- MODAL: CHARACTER RELIC BREAKDOWN -->
-  <div id="relicModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
-    <div class="glass-card max-w-3xl w-full rounded-2xl border border-hsr-gold/40 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-      
-      <!-- Modal Header -->
-      <div class="p-5 border-b border-slate-800 flex items-center justify-between bg-hsr-dark/70">
-        <div class="flex items-center gap-3">
-          <img id="modalCharAvatar" class="w-12 h-12 rounded-xl border border-hsr-gold object-cover bg-slate-900" src="" alt="Char"/>
-          <div>
-            <div class="flex items-center gap-2">
-              <h3 id="modalCharName" class="text-lg font-bold text-white">Character Name</h3>
-              <span id="modalCharEidolon" class="text-xs px-2 py-0.5 rounded bg-purple-900/60 text-purple-300 border border-purple-500/40">E0</span>
-            </div>
-            <p id="modalCharPath" class="text-xs text-slate-400">Path • Element</p>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-3">
-          <div class="text-right">
-            <span class="text-[10px] uppercase text-slate-400 block">Overall Build Tier</span>
-            <span id="modalBuildTier" class="text-xl font-black text-hsr-gold">SS (31.4 RV)</span>
-          </div>
-          <button onclick="closeModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition">
-            <i data-lucide="x" class="w-5 h-5"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- Modal Body (Relic Slot Cards) -->
-      <div id="modalRelicsList" class="p-5 overflow-y-auto space-y-3.5 divide-y divide-slate-800/60">
-        <!-- Relics dynamically rendered -->
-      </div>
-
-      <!-- Modal Footer -->
-      <div class="p-4 border-t border-slate-800 bg-hsr-dark/60 flex items-center justify-between text-xs text-slate-400">
-        <span>Scoring formula: Sum of all optimal substat rolls normalized per tier weight.</span>
-        <button onclick="closeModal()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-medium transition">
-          Close
-        </button>
-      </div>
-
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="mt-auto border-t border-slate-800/80 bg-hsr-dark/90 py-4 text-center text-xs text-slate-500">
-    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-      <p>Astral Express Relic Scorer is a fan tool and not affiliated with HoYoverse. Honkai: Star Rail is a registered trademark of miHoYo Co., Ltd.</p>
-      <p class="text-slate-400 font-mono">Data parsed via Mihomo Open Gateway</p>
-    </div>
-  </footer>
-
-  <!-- APPLICATION LOGIC -->
   <script>
-    /* =====================================================================
-       1. DATA DEFINITIONS & SUBSTAT WEIGHT CONSTANTS
-       ===================================================================== */
-    const STAT_WEIGHTS = {
-      // Hypercarries / Crit DPS
-      "Acheron": { "CritRate": 1.0, "CritDMG": 1.0, "AttackAddedRatio": 0.75, "Speed": 0.75 },
-      "Feixiao": { "CritRate": 1.0, "CritDMG": 1.0, "AttackAddedRatio": 0.75, "Speed": 1.0 },
-      "Dan Heng • Imbibitor Lunae": { "CritRate": 1.0, "CritDMG": 1.0, "AttackAddedRatio": 0.75, "Speed": 0.75 },
-      "Jingliu": { "CritDMG": 1.0, "CritRate": 0.75, "Speed": 1.0, "AttackAddedRatio": 0.75 },
-      "Dr. Ratio": { "CritRate": 1.0, "CritDMG": 1.0, "AttackAddedRatio": 0.75, "Speed": 0.75 },
+    lucide.createIcons();
 
-      // Break / Super Break Carries
-      "Firefly": { "BreakDamageAddedRatioBase": 1.0, "AttackAddedRatio": 0.75, "Speed": 1.0 },
-      "Boothill": { "BreakDamageAddedRatioBase": 1.0, "Speed": 1.0, "CritRate": 0.5, "CritDMG": 0.5 },
-      "Rappa": { "BreakDamageAddedRatioBase": 1.0, "AttackAddedRatio": 0.75, "Speed": 1.0 },
-
-      // DoT & Nihility Debuffers
-      "Kafka": { "AttackAddedRatio": 1.0, "Speed": 1.0, "StatusProbabilityBase": 0.75, "BreakDamageAddedRatioBase": 0.5 },
-      "Black Swan": { "StatusProbabilityBase": 1.0, "AttackAddedRatio": 0.75, "Speed": 1.0 },
-      "Jiaoqiu": { "StatusProbabilityBase": 1.0, "Speed": 1.0, "HPAddedRatio": 0.5, "DefAddedRatio": 0.5 },
-      "Silver Wolf": { "StatusProbabilityBase": 1.0, "Speed": 1.0, "CritRate": 0.5, "CritDMG": 0.5 },
-
-      // Harmony Supports
-      "Robin": { "AttackAddedRatio": 1.0, "Speed": 0.6, "HPAddedRatio": 0.5, "DefAddedRatio": 0.5 },
-      "Ruan Mei": { "BreakDamageAddedRatioBase": 1.0, "Speed": 1.0, "HPAddedRatio": 0.5, "DefAddedRatio": 0.5 },
-      "Sparkle": { "CritDMG": 1.0, "Speed": 1.0, "HPAddedRatio": 0.5, "DefAddedRatio": 0.5 },
-      "Sunday": { "CritDMG": 1.0, "Speed": 1.0, "HPAddedRatio": 0.5, "DefAddedRatio": 0.5 },
-      "Tingyun": { "Speed": 1.0, "AttackAddedRatio": 0.75, "HPAddedRatio": 0.5, "DefAddedRatio": 0.5 },
-
-      // Sustains
-      "Aventurine": { "DefAddedRatio": 1.0, "CritDMG": 0.75, "CritRate": 0.5, "Speed": 0.75 },
-      "Gallagher": { "BreakDamageAddedRatioBase": 1.0, "Speed": 1.0, "StatusResistanceBase": 0.75 },
-      "Lingsha": { "BreakDamageAddedRatioBase": 1.0, "AttackAddedRatio": 0.75, "Speed": 1.0 },
-      "Huohuo": { "HPAddedRatio": 1.0, "Speed": 1.0, "StatusResistanceBase": 0.75 },
-      "Fu Xuan": { "HPAddedRatio": 1.0, "DefAddedRatio": 0.75, "Speed": 1.0, "CritRate": 0.3 }
-    };
-
-    // Substat max normalizer roll steps for 5-star relics
+    // 1. STAT NORMALIZERS & WEIGHT PROFILES
     const STAT_NORMALIZERS = {
       "CritRate": 3.24,
       "CritDMG": 6.48,
@@ -436,818 +139,214 @@
       "AttackAddedRatio": 4.32,
       "HPAddedRatio": 4.32,
       "DefAddedRatio": 5.4,
-      "StatusProbabilityBase": 4.32,      // Effect Hit Rate
-      "StatusResistanceBase": 4.32,       // Effect RES
-      "BreakDamageAddedRatioBase": 6.48,  // Break Effect
-      "AttackDelta": 21.0,
-      "HPDelta": 42.0,
-      "DefDelta": 21.0
+      "StatusProbabilityBase": 4.32,
+      "StatusResistanceBase": 4.32,
+      "BreakDamageAddedRatioBase": 6.48
     };
 
-    // Realistic Demo Datasets for instantaneous testing
-    const DEMO_PRESETS = {
-      whale: {
-        player: {
-          nickname: "StellePrime",
-          level: 70,
-          world_level: 6,
-          server: "America (UID 600392110)",
-          signature: "E6S5 Acheron obliterates all reality.",
-          avatar: { icon: "https://placehold.co/80x80/231238/ffd166?text=Acheron" }
-        },
-        characters: [
-          {
-            name: "Acheron",
-            level: 80,
-            rank: 6, // Eidolon 6
-            path: { name: "Nihility" },
-            element: { name: "Lightning", color: "#d946ef" },
-            icon: "https://placehold.co/120x120/1e1233/d946ef?text=Acheron",
-            light_cone: { name: "Along the Passing Shore", rank: 5, level: 80 },
-            relics: [
-              { name: "Pioneer's Headpiece", type: 1, score: 5.4, tier: "WTF / OP", main_affix: { name: "HP", display: "705" }, sub_affix: [ { name: "CRIT Rate", display: "9.7%", field: "CritRate", weight: 1.0, roll_val: 3.0 }, { name: "CRIT DMG", display: "17.4%", field: "CritDMG", weight: 1.0, roll_val: 2.7 }, { name: "ATK%", display: "4.3%", field: "AttackAddedRatio", weight: 0.75, roll_val: 0.75 }, { name: "DEF", display: "19", field: "DefDelta", weight: 0.0, roll_val: 0.0 } ] },
-              { name: "Pioneer's Gloves", type: 2, score: 4.8, tier: "SS", main_affix: { name: "ATK", display: "352" }, sub_affix: [ { name: "CRIT DMG", display: "25.9%", field: "CritDMG", weight: 1.0, roll_val: 4.0 }, { name: "CRIT Rate", display: "3.2%", field: "CritRate", weight: 1.0, roll_val: 1.0 }, { name: "SPD", display: "4", field: "Speed", weight: 0.75, roll_val: 1.3 } ] },
-              { name: "Pioneer's Robe", type: 3, score: 4.3, tier: "SS", main_affix: { name: "CRIT DMG", display: "64.8%" }, sub_affix: [ { name: "CRIT Rate", display: "10.3%", field: "CritRate", weight: 1.0, roll_val: 3.18 }, { name: "ATK%", display: "8.6%", field: "AttackAddedRatio", weight: 0.75, roll_val: 1.5 }, { name: "HP%", display: "4.3%", field: "HPAddedRatio", weight: 0.0, roll_val: 0.0 } ] },
-              { name: "Pioneer's Boots", type: 4, score: 3.9, tier: "S", main_affix: { name: "ATK%", display: "43.2%" }, sub_affix: [ { name: "CRIT DMG", display: "19.4%", field: "CritDMG", weight: 1.0, roll_val: 3.0 }, { name: "CRIT Rate", display: "5.8%", field: "CritRate", weight: 1.0, roll_val: 1.8 } ] },
-              { name: "Izumo Orb", type: 5, score: 4.5, tier: "SS", main_affix: { name: "Lightning DMG", display: "38.8%" }, sub_affix: [ { name: "CRIT DMG", display: "18.2%", field: "CritDMG", weight: 1.0, roll_val: 2.8 }, { name: "CRIT Rate", display: "6.4%", field: "CritRate", weight: 1.0, roll_val: 2.0 } ] },
-              { name: "Izumo Rope", type: 6, score: 3.8, tier: "S", main_affix: { name: "ATK%", display: "43.2%" }, sub_affix: [ { name: "CRIT DMG", display: "14.2%", field: "CritDMG", weight: 1.0, roll_val: 2.2 }, { name: "CRIT Rate", display: "6.1%", field: "CritRate", weight: 1.0, roll_val: 1.9 } ] }
-            ]
-          },
-          {
-            name: "Jiaoqiu",
-            level: 80,
-            rank: 1,
-            path: { name: "Nihility" },
-            element: { name: "Fire", color: "#f97316" },
-            icon: "https://placehold.co/120x120/281611/f97316?text=Jiaoqiu",
-            light_cone: { name: "Those Many Springs", rank: 1, level: 80 },
-            relics: [
-              { name: "Prisoner Cap", type: 1, score: 4.2, tier: "SS", main_affix: { name: "HP", display: "705" }, sub_affix: [ { name: "Effect Hit Rate", display: "15.5%", field: "StatusProbabilityBase", weight: 1.0, roll_val: 3.5 }, { name: "SPD", display: "6", field: "Speed", weight: 1.0, roll_val: 2.6 } ] },
-              { name: "Prisoner Gloves", type: 2, score: 3.9, tier: "S", main_affix: { name: "ATK", display: "352" }, sub_affix: [ { name: "SPD", display: "9", field: "Speed", weight: 1.0, roll_val: 3.9 }, { name: "EHR", display: "8.6%", field: "StatusProbabilityBase", weight: 1.0, roll_val: 2.0 } ] },
-              { name: "Prisoner Robe", type: 3, score: 4.0, tier: "S", main_affix: { name: "Effect Hit Rate", display: "43.2%" }, sub_affix: [ { name: "SPD", display: "7", field: "Speed", weight: 1.0, roll_val: 3.0 }, { name: "HP%", display: "8.6%", field: "HPAddedRatio", weight: 0.5, roll_val: 1.0 } ] },
-              { name: "Prisoner Boots", type: 4, score: 4.4, tier: "SS", main_affix: { name: "SPD", display: "25" }, sub_affix: [ { name: "Effect Hit Rate", display: "18.2%", field: "StatusProbabilityBase", weight: 1.0, roll_val: 4.2 } ] },
-              { name: "Penacony Orb", type: 5, score: 3.2, tier: "S", main_affix: { name: "HP%", display: "43.2%" }, sub_affix: [ { name: "SPD", display: "5", field: "Speed", weight: 1.0, roll_val: 2.1 } ] },
-              { name: "Penacony Rope", type: 6, score: 3.5, tier: "S", main_affix: { name: "Energy Regen Rate", display: "19.4%" }, sub_affix: [ { name: "Effect Hit Rate", display: "12.9%", field: "StatusProbabilityBase", weight: 1.0, roll_val: 3.0 } ] }
-            ]
-          },
-          {
-            name: "Sparkle",
-            level: 80,
-            rank: 2,
-            path: { name: "Harmony" },
-            element: { name: "Quantum", color: "#a855f7" },
-            icon: "https://placehold.co/120x120/21122a/a855f7?text=Sparkle",
-            light_cone: { name: "Earthly Escapade", rank: 1, level: 80 },
-            relics: [
-              { name: "Messenger Cap", type: 1, score: 4.6, tier: "SS", main_affix: { name: "HP", display: "705" }, sub_affix: [ { name: "SPD", display: "9", field: "Speed", weight: 1.0, roll_val: 3.9 }, { name: "CRIT DMG", display: "16.2%", field: "CritDMG", weight: 1.0, roll_val: 2.5 } ] },
-              { name: "Messenger Gloves", type: 2, score: 4.3, tier: "SS", main_affix: { name: "ATK", display: "352" }, sub_affix: [ { name: "SPD", display: "8", field: "Speed", weight: 1.0, roll_val: 3.5 }, { name: "CRIT DMG", display: "12.9%", field: "CritDMG", weight: 1.0, roll_val: 2.0 } ] },
-              { name: "Messenger Robe", type: 3, score: 4.1, tier: "S", main_affix: { name: "CRIT DMG", display: "64.8%" }, sub_affix: [ { name: "SPD", display: "6", field: "Speed", weight: 1.0, roll_val: 2.6 } ] },
-              { name: "Messenger Boots", type: 4, score: 4.5, tier: "SS", main_affix: { name: "SPD", display: "25" }, sub_affix: [ { name: "CRIT DMG", display: "22.6%", field: "CritDMG", weight: 1.0, roll_val: 3.5 } ] },
-              { name: "Keel Orb", type: 5, score: 3.8, tier: "S", main_affix: { name: "HP%", display: "43.2%" }, sub_affix: [ { name: "CRIT DMG", display: "17.4%", field: "CritDMG", weight: 1.0, roll_val: 2.7 }, { name: "SPD", display: "3", field: "Speed", weight: 1.0, roll_val: 1.3 } ] },
-              { name: "Keel Rope", type: 6, score: 4.2, tier: "SS", main_affix: { name: "Energy Regen Rate", display: "19.4%" }, sub_affix: [ { name: "SPD", display: "7", field: "Speed", weight: 1.0, roll_val: 3.0 }, { name: "Effect RES", display: "8.6%", field: "StatusResistanceBase", weight: 0.5, roll_val: 1.0 } ] }
-            ]
-          },
-          {
-            name: "Aventurine",
-            level: 80,
-            rank: 1,
-            path: { name: "Preservation" },
-            element: { name: "Imaginary", color: "#eab308" },
-            icon: "https://placehold.co/120x120/292310/eab308?text=Aventurine",
-            light_cone: { name: "Inherently Unjust Destiny", rank: 1, level: 80 },
-            relics: [
-              { name: "Knight Helmet", type: 1, score: 4.1, tier: "S", main_affix: { name: "HP", display: "705" }, sub_affix: [ { name: "DEF%", display: "19.4%", field: "DefAddedRatio", weight: 1.0, roll_val: 3.6 }, { name: "CRIT DMG", display: "11.6%", field: "CritDMG", weight: 0.75, roll_val: 1.3 } ] },
-              { name: "Knight Gauntlet", type: 2, score: 4.4, tier: "SS", main_affix: { name: "ATK", display: "352" }, sub_affix: [ { name: "DEF%", display: "16.2%", field: "DefAddedRatio", weight: 1.0, roll_val: 3.0 }, { name: "SPD", display: "6", field: "Speed", weight: 0.75, roll_val: 1.9 } ] },
-              { name: "Knight Chest", type: 3, score: 3.9, tier: "S", main_affix: { name: "DEF%", display: "54.0%" }, sub_affix: [ { name: "CRIT DMG", display: "18.2%", field: "CritDMG", weight: 0.75, roll_val: 2.1 }, { name: "SPD", display: "4", field: "Speed", weight: 0.75, roll_val: 1.3 } ] },
-              { name: "Knight Boots", type: 4, score: 4.0, tier: "S", main_affix: { name: "SPD", display: "25" }, sub_affix: [ { name: "DEF%", display: "21.6%", field: "DefAddedRatio", weight: 1.0, roll_val: 4.0 } ] },
-              { name: "Salsotto Orb", type: 5, score: 3.7, tier: "S", main_affix: { name: "DEF%", display: "54.0%" }, sub_affix: [ { name: "CRIT DMG", display: "14.2%", field: "CritDMG", weight: 0.75, roll_val: 1.6 }, { name: "CRIT Rate", display: "5.8%", field: "CritRate", weight: 0.5, roll_val: 0.9 } ] },
-              { name: "Salsotto Rope", type: 6, score: 3.8, tier: "S", main_affix: { name: "DEF%", display: "54.0%" }, sub_affix: [ { name: "CRIT DMG", display: "16.4%", field: "CritDMG", weight: 0.75, roll_val: 1.9 }, { name: "SPD", display: "4", field: "Speed", weight: 0.75, roll_val: 1.3 } ] }
-            ]
-          }
-        ]
-      },
-      break: {
-        player: {
-          nickname: "FireflyEnjoyer",
-          level: 70,
-          world_level: 6,
-          server: "Europe (UID 700441920)",
-          signature: "I will set the seas ablaze!",
-          avatar: { icon: "https://placehold.co/80x80/132e23/10b981?text=Firefly" }
-        },
-        characters: [
-          {
-            name: "Firefly",
-            level: 80,
-            rank: 2,
-            path: { name: "Destruction" },
-            element: { name: "Fire", color: "#f97316" },
-            icon: "https://placehold.co/120x120/281611/10b981?text=Firefly",
-            light_cone: { name: "Whereabouts Should Dreams Rest", rank: 1, level: 80 },
-            relics: [
-              { name: "Iron Cavalry Goggles", type: 1, score: 4.9, tier: "SS", main_affix: { name: "HP", display: "705" }, sub_affix: [ { name: "Break Effect", display: "23.3%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 3.6 }, { name: "SPD", display: "6", field: "Speed", weight: 1.0, roll_val: 2.6 }, { name: "ATK%", display: "7.7%", field: "AttackAddedRatio", weight: 0.75, roll_val: 1.3 } ] },
-              { name: "Iron Cavalry Bracers", type: 2, score: 4.7, tier: "SS", main_affix: { name: "ATK", display: "352" }, sub_affix: [ { name: "Break Effect", display: "22.0%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 3.4 }, { name: "SPD", display: "7", field: "Speed", weight: 1.0, roll_val: 3.0 } ] },
-              { name: "Iron Cavalry Suit", type: 3, score: 3.8, tier: "S", main_affix: { name: "ATK%", display: "43.2%" }, sub_affix: [ { name: "Break Effect", display: "16.8%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 2.6 }, { name: "SPD", display: "4", field: "Speed", weight: 1.0, roll_val: 1.7 } ] },
-              { name: "Iron Cavalry Boots", type: 4, score: 4.1, tier: "S", main_affix: { name: "SPD", display: "25" }, sub_affix: [ { name: "Break Effect", display: "24.6%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 3.8 } ] },
-              { name: "Forge Kalpagni Orb", type: 5, score: 4.5, tier: "SS", main_affix: { name: "ATK%", display: "43.2%" }, sub_affix: [ { name: "Break Effect", display: "25.2%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 3.9 }, { name: "SPD", display: "4", field: "Speed", weight: 1.0, roll_val: 1.7 } ] },
-              { name: "Forge Kalpagni Rope", type: 6, score: 4.6, tier: "SS", main_affix: { name: "Break Effect", display: "64.8%" }, sub_affix: [ { name: "ATK%", display: "12.9%", field: "AttackAddedRatio", weight: 0.75, roll_val: 2.2 }, { name: "SPD", display: "6", field: "Speed", weight: 1.0, roll_val: 2.6 } ] }
-            ]
-          },
-          {
-            name: "Ruan Mei",
-            level: 80,
-            rank: 1,
-            path: { name: "Harmony" },
-            element: { name: "Ice", color: "#38bdf8" },
-            icon: "https://placehold.co/120x120/142938/38bdf8?text=RuanMei",
-            light_cone: { name: "Past Self in Mirror", rank: 1, level: 80 },
-            relics: [
-              { name: "Thief's Mask", type: 1, score: 4.3, tier: "SS", main_affix: { name: "HP", display: "705" }, sub_affix: [ { name: "Break Effect", display: "19.4%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 3.0 }, { name: "SPD", display: "7", field: "Speed", weight: 1.0, roll_val: 3.0 } ] },
-              { name: "Thief's Gloves", type: 2, score: 4.0, tier: "S", main_affix: { name: "ATK", display: "352" }, sub_affix: [ { name: "Break Effect", display: "23.3%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 3.6 }, { name: "SPD", display: "4", field: "Speed", weight: 1.0, roll_val: 1.7 } ] },
-              { name: "Thief's Armor", type: 3, score: 3.7, tier: "S", main_affix: { name: "HP%", display: "43.2%" }, sub_affix: [ { name: "Break Effect", display: "16.2%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 2.5 }, { name: "SPD", display: "5", field: "Speed", weight: 1.0, roll_val: 2.1 } ] },
-              { name: "Thief's Boots", type: 4, score: 4.2, tier: "SS", main_affix: { name: "SPD", display: "25" }, sub_affix: [ { name: "Break Effect", display: "21.4%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 3.3 } ] },
-              { name: "Talia Orb", type: 5, score: 4.1, tier: "S", main_affix: { name: "HP%", display: "43.2%" }, sub_affix: [ { name: "Break Effect", display: "22.6%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 3.5 } ] },
-              { name: "Talia Rope", type: 6, score: 4.5, tier: "SS", main_affix: { name: "Energy Regen Rate", display: "19.4%" }, sub_affix: [ { name: "Break Effect", display: "18.1%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 2.8 }, { name: "SPD", display: "6", field: "Speed", weight: 1.0, roll_val: 2.6 } ] }
-            ]
-          },
-          {
-            name: "Gallagher",
-            level: 80,
-            rank: 6,
-            path: { name: "Abundance" },
-            element: { name: "Fire", color: "#f97316" },
-            icon: "https://placehold.co/120x120/381c14/f97316?text=Gallagher",
-            light_cone: { name: "What Is Real?", rank: 5, level: 80 },
-            relics: [
-              { name: "Passerby Cap", type: 1, score: 4.2, tier: "SS", main_affix: { name: "HP", display: "705" }, sub_affix: [ { name: "Break Effect", display: "21.4%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 3.3 }, { name: "SPD", display: "6", field: "Speed", weight: 1.0, roll_val: 2.6 } ] },
-              { name: "Passerby Gloves", type: 2, score: 3.9, tier: "S", main_affix: { name: "ATK", display: "352" }, sub_affix: [ { name: "SPD", display: "7", field: "Speed", weight: 1.0, roll_val: 3.0 }, { name: "Break Effect", display: "16.8%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 2.6 } ] },
-              { name: "Passerby Coat", type: 3, score: 3.5, tier: "A", main_affix: { name: "Outgoing Healing", display: "34.5%" }, sub_affix: [ { name: "Break Effect", display: "14.2%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 2.2 }, { name: "SPD", display: "3", field: "Speed", weight: 1.0, roll_val: 1.3 } ] },
-              { name: "Passerby Boots", type: 4, score: 4.4, tier: "SS", main_affix: { name: "SPD", display: "25" }, sub_affix: [ { name: "Break Effect", display: "25.9%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 4.0 } ] },
-              { name: "Kalpagni Orb", type: 5, score: 3.8, tier: "S", main_affix: { name: "HP%", display: "43.2%" }, sub_affix: [ { name: "Break Effect", display: "19.4%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 3.0 } ] },
-              { name: "Kalpagni Rope", type: 6, score: 4.3, tier: "SS", main_affix: { name: "Energy Regen Rate", display: "19.4%" }, sub_affix: [ { name: "Break Effect", display: "18.8%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 2.9 }, { name: "SPD", display: "5", field: "Speed", weight: 1.0, roll_val: 2.1 } ] }
-            ]
-          },
-          {
-            name: "Lingsha",
-            level: 80,
-            rank: 0,
-            path: { name: "Abundance" },
-            element: { name: "Fire", color: "#f97316" },
-            icon: "https://placehold.co/120x120/2e1919/f97316?text=Lingsha",
-            light_cone: { name: "Scent Alone Stays True", rank: 1, level: 80 },
-            relics: [
-              { name: "Iron Cavalry Helm", type: 1, score: 4.0, tier: "S", main_affix: { name: "HP", display: "705" }, sub_affix: [ { name: "Break Effect", display: "18.8%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 2.9 }, { name: "SPD", display: "6", field: "Speed", weight: 1.0, roll_val: 2.6 } ] },
-              { name: "Iron Cavalry Gloves", type: 2, score: 4.1, tier: "S", main_affix: { name: "ATK", display: "352" }, sub_affix: [ { name: "Break Effect", display: "19.4%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 3.0 }, { name: "ATK%", display: "8.6%", field: "AttackAddedRatio", weight: 0.75, roll_val: 1.5 } ] },
-              { name: "Iron Cavalry Chest", type: 3, score: 3.6, tier: "A", main_affix: { name: "Outgoing Healing", display: "34.5%" }, sub_affix: [ { name: "Break Effect", display: "15.5%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 2.4 } ] },
-              { name: "Iron Cavalry Boots", type: 4, score: 4.2, tier: "SS", main_affix: { name: "SPD", display: "25" }, sub_affix: [ { name: "Break Effect", display: "22.0%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 3.4 } ] },
-              { name: "Kalpagni Orb", type: 5, score: 3.9, tier: "S", main_affix: { name: "ATK%", display: "43.2%" }, sub_affix: [ { name: "Break Effect", display: "18.1%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 2.8 } ] },
-              { name: "Kalpagni Rope", type: 6, score: 4.1, tier: "S", main_affix: { name: "Energy Regen Rate", display: "19.4%" }, sub_affix: [ { name: "Break Effect", display: "19.4%", field: "BreakDamageAddedRatioBase", weight: 1.0, roll_val: 3.0 } ] }
-            ]
-          }
-        ]
-      },
-      fua: {
-        player: {
-          nickname: "GeneralFeixiao",
-          level: 70,
-          world_level: 6,
-          server: "Asia (UID 800333171)",
-          signature: "Victory in six strikes.",
-          avatar: { icon: "https://placehold.co/80x80/1a3328/34d399?text=Feixiao" }
-        },
-        characters: [
-          {
-            name: "Feixiao",
-            level: 80,
-            rank: 2,
-            path: { name: "The Hunt" },
-            element: { name: "Wind", color: "#34d399" },
-            icon: "https://placehold.co/120x120/122b20/34d399?text=Feixiao",
-            light_cone: { name: "I Venture Forth to Hunt", rank: 1, level: 80 },
-            relics: [
-              { name: "Valorant Head", type: 1, score: 5.1, tier: "WTF / OP", main_affix: { name: "HP", display: "705" }, sub_affix: [ { name: "CRIT Rate", display: "8.7%", field: "CritRate", weight: 1.0, roll_val: 2.7 }, { name: "CRIT DMG", display: "18.8%", field: "CritDMG", weight: 1.0, roll_val: 2.9 }, { name: "SPD", display: "4", field: "Speed", weight: 1.0, roll_val: 1.7 } ] },
-              { name: "Valorant Gloves", type: 2, score: 4.6, tier: "SS", main_affix: { name: "ATK", display: "352" }, sub_affix: [ { name: "CRIT DMG", display: "23.3%", field: "CritDMG", weight: 1.0, roll_val: 3.6 }, { name: "CRIT Rate", display: "5.8%", field: "CritRate", weight: 1.0, roll_val: 1.8 } ] },
-              { name: "Valorant Chest", type: 3, score: 4.2, tier: "SS", main_affix: { name: "CRIT Rate", display: "32.4%" }, sub_affix: [ { name: "CRIT DMG", display: "21.4%", field: "CritDMG", weight: 1.0, roll_val: 3.3 }, { name: "ATK%", display: "8.6%", field: "AttackAddedRatio", weight: 0.75, roll_val: 1.5 } ] },
-              { name: "Valorant Boots", type: 4, score: 4.5, tier: "SS", main_affix: { name: "SPD", display: "25" }, sub_affix: [ { name: "CRIT DMG", display: "19.4%", field: "CritDMG", weight: 1.0, roll_val: 3.0 }, { name: "CRIT Rate", display: "6.1%", field: "CritRate", weight: 1.0, roll_val: 1.9 } ] },
-              { name: "Duran Orb", type: 5, score: 4.3, tier: "SS", main_affix: { name: "Wind DMG", display: "38.8%" }, sub_affix: [ { name: "CRIT DMG", display: "17.4%", field: "CritDMG", weight: 1.0, roll_val: 2.7 }, { name: "CRIT Rate", display: "6.4%", field: "CritRate", weight: 1.0, roll_val: 2.0 } ] },
-              { name: "Duran Rope", type: 6, score: 4.0, tier: "S", main_affix: { name: "ATK%", display: "43.2%" }, sub_affix: [ { name: "CRIT DMG", display: "15.5%", field: "CritDMG", weight: 1.0, roll_val: 2.4 }, { name: "CRIT Rate", display: "5.8%", field: "CritRate", weight: 1.0, roll_val: 1.8 } ] }
-            ]
-          },
-          {
-            name: "Robin",
-            level: 80,
-            rank: 1,
-            path: { name: "Harmony" },
-            element: { name: "Physical", color: "#e2e8f0" },
-            icon: "https://placehold.co/120x120/2b2a1e/e2e8f0?text=Robin",
-            light_cone: { name: "Flowing Nightglow", rank: 1, level: 80 },
-            relics: [
-              { name: "Musketeer Cap", type: 1, score: 4.3, tier: "SS", main_affix: { name: "HP", display: "705" }, sub_affix: [ { name: "ATK%", display: "17.2%", field: "AttackAddedRatio", weight: 1.0, roll_val: 4.0 }, { name: "SPD", display: "4", field: "Speed", weight: 0.6, roll_val: 1.0 } ] },
-              { name: "Musketeer Gloves", type: 2, score: 4.0, tier: "S", main_affix: { name: "ATK", display: "352" }, sub_affix: [ { name: "ATK%", display: "15.5%", field: "AttackAddedRatio", weight: 1.0, roll_val: 3.6 }, { name: "HP%", display: "8.6%", field: "HPAddedRatio", weight: 0.5, roll_val: 1.0 } ] },
-              { name: "Musketeer Robe", type: 3, score: 3.8, tier: "S", main_affix: { name: "ATK%", display: "43.2%" }, sub_affix: [ { name: "SPD", display: "5", field: "Speed", weight: 0.6, roll_val: 1.3 }, { name: "HP%", display: "7.7%", field: "HPAddedRatio", weight: 0.5, roll_val: 0.9 } ] },
-              { name: "Musketeer Boots", type: 4, score: 4.1, tier: "S", main_affix: { name: "ATK%", display: "43.2%" }, sub_affix: [ { name: "SPD", display: "6", field: "Speed", weight: 0.6, roll_val: 1.5 }, { name: "HP%", display: "8.6%", field: "HPAddedRatio", weight: 0.5, roll_val: 1.0 } ] },
-              { name: "Lushaka Orb", type: 5, score: 3.9, tier: "S", main_affix: { name: "ATK%", display: "43.2%" }, sub_affix: [ { name: "SPD", display: "4", field: "Speed", weight: 0.6, roll_val: 1.0 }, { name: "HP%", display: "8.6%", field: "HPAddedRatio", weight: 0.5, roll_val: 1.0 } ] },
-              { name: "Lushaka Rope", type: 6, score: 4.4, tier: "SS", main_affix: { name: "Energy Regen Rate", display: "19.4%" }, sub_affix: [ { name: "ATK%", display: "16.8%", field: "AttackAddedRatio", weight: 1.0, roll_val: 3.9 } ] }
-            ]
-          },
-          {
-            name: "Aventurine",
-            level: 80,
-            rank: 0,
-            path: { name: "Preservation" },
-            element: { name: "Imaginary", color: "#eab308" },
-            icon: "https://placehold.co/120x120/292310/eab308?text=Aventurine",
-            light_cone: { name: "Destiny's Threads Forewoven", rank: 5, level: 80 },
-            relics: [
-              { name: "Knight Helmet", type: 1, score: 3.8, tier: "S", main_affix: { name: "HP", display: "705" }, sub_affix: [ { name: "DEF%", display: "15.5%", field: "DefAddedRatio", weight: 1.0, roll_val: 2.8 }, { name: "CRIT DMG", display: "11.6%", field: "CritDMG", weight: 0.75, roll_val: 1.3 } ] },
-              { name: "Knight Gauntlet", type: 2, score: 4.1, tier: "S", main_affix: { name: "ATK", display: "352" }, sub_affix: [ { name: "DEF%", display: "18.8%", field: "DefAddedRatio", weight: 1.0, roll_val: 3.5 }, { name: "SPD", display: "4", field: "Speed", weight: 0.75, roll_val: 1.3 } ] },
-              { name: "Knight Chest", type: 3, score: 3.9, tier: "S", main_affix: { name: "DEF%", display: "54.0%" }, sub_affix: [ { name: "CRIT DMG", display: "16.8%", field: "CritDMG", weight: 0.75, roll_val: 1.9 } ] },
-              { name: "Knight Boots", type: 4, score: 4.0, tier: "S", main_affix: { name: "SPD", display: "25" }, sub_affix: [ { name: "DEF%", display: "20.2%", field: "DefAddedRatio", weight: 1.0, roll_val: 3.7 } ] },
-              { name: "Salsotto Orb", type: 5, score: 3.7, tier: "S", main_affix: { name: "DEF%", display: "54.0%" }, sub_affix: [ { name: "CRIT DMG", display: "14.2%", field: "CritDMG", weight: 0.75, roll_val: 1.6 } ] },
-              { name: "Salsotto Rope", type: 6, score: 3.6, tier: "A", main_affix: { name: "DEF%", display: "54.0%" }, sub_affix: [ { name: "CRIT DMG", display: "12.9%", field: "CritDMG", weight: 0.75, roll_val: 1.5 } ] }
-            ]
-          },
-          {
-            name: "Dr. Ratio",
-            level: 80,
-            rank: 0,
-            path: { name: "The Hunt" },
-            element: { name: "Imaginary", color: "#eab308" },
-            icon: "https://placehold.co/120x120/232014/eab308?text=Ratio",
-            light_cone: { name: "Baptism of Pure Thought", rank: 1, level: 80 },
-            relics: [
-              { name: "Wastelander Cap", type: 1, score: 4.5, tier: "SS", main_affix: { name: "HP", display: "705" }, sub_affix: [ { name: "CRIT Rate", display: "6.4%", field: "CritRate", weight: 1.0, roll_val: 2.0 }, { name: "CRIT DMG", display: "18.8%", field: "CritDMG", weight: 1.0, roll_val: 2.9 } ] },
-              { name: "Wastelander Gloves", type: 2, score: 4.2, tier: "SS", main_affix: { name: "ATK", display: "352" }, sub_affix: [ { name: "CRIT DMG", display: "21.4%", field: "CritDMG", weight: 1.0, roll_val: 3.3 }, { name: "CRIT Rate", display: "3.2%", field: "CritRate", weight: 1.0, roll_val: 1.0 } ] },
-              { name: "Wastelander Chest", type: 3, score: 3.9, tier: "S", main_affix: { name: "CRIT DMG", display: "64.8%" }, sub_affix: [ { name: "CRIT Rate", display: "9.7%", field: "CritRate", weight: 1.0, roll_val: 3.0 } ] },
-              { name: "Wastelander Boots", type: 4, score: 4.0, tier: "S", main_affix: { name: "SPD", display: "25" }, sub_affix: [ { name: "CRIT DMG", display: "17.4%", field: "CritDMG", weight: 1.0, roll_val: 2.7 } ] },
-              { name: "Salsotto Orb", type: 5, score: 3.8, tier: "S", main_affix: { name: "Imaginary DMG", display: "38.8%" }, sub_affix: [ { name: "CRIT Rate", display: "6.1%", field: "CritRate", weight: 1.0, roll_val: 1.9 } ] },
-              { name: "Salsotto Rope", type: 6, score: 3.7, tier: "S", main_affix: { name: "ATK%", display: "43.2%" }, sub_affix: [ { name: "CRIT DMG", display: "16.2%", field: "CritDMG", weight: 1.0, roll_val: 2.5 } ] }
-            ]
-          }
-        ]
-      }
+    const STAT_WEIGHTS = {
+      "Acheron": { "CritRate": 1.0, "CritDMG": 1.0, "AttackAddedRatio": 0.75, "Speed": 0.75 },
+      "Feixiao": { "CritRate": 1.0, "CritDMG": 1.0, "AttackAddedRatio": 0.75, "Speed": 1.0 },
+      "Firefly": { "BreakDamageAddedRatioBase": 1.0, "AttackAddedRatio": 0.75, "Speed": 1.0 },
+      "Boothill": { "BreakDamageAddedRatioBase": 1.0, "Speed": 1.0, "CritRate": 0.5 },
+      "Robin": { "AttackAddedRatio": 1.0, "Speed": 0.75, "HPAddedRatio": 0.5 },
+      "Ruan Mei": { "BreakDamageAddedRatioBase": 1.0, "Speed": 1.0, "HPAddedRatio": 0.5 },
+      "Aventurine": { "DefAddedRatio": 1.0, "CritDMG": 0.75, "Speed": 0.75 }
     };
 
-    /* =====================================================================
-       2. APPLICATION STATE
-       ===================================================================== */
-    let currentAccountData = null;
-    let selectedTeamIndices = [];
+    let currentCharacters = [];
 
-    /* =====================================================================
-       3. REGION DETECTOR & API FETCHER
-       ===================================================================== */
-    function detectRegion(uid) {
-      const badge = document.getElementById('regionBadge');
-      if (!uid || uid.length < 1) {
-        badge.classList.add('hidden');
-        return;
+    // 2. MULTI-GATEWAY DATA FETCHER (BYPASSES CORS BLOCKS)
+    async function fetchShowcase(uid) {
+      const endpoints = [
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://api.mihomo.me/sr_info_parsed/${uid}?lang=en`)}`,
+        `https://corsproxy.io/?${encodeURIComponent(`https://api.mihomo.me/sr_info_parsed/${uid}?lang=en`)}`,
+        `https://api.mihomo.me/sr_info_parsed/${uid}?lang=en`
+      ];
+
+      for (let url of endpoints) {
+        try {
+          const res = await fetch(url);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.player) return data;
+          }
+        } catch (e) {
+          console.warn("Retrying with next proxy fallback...", e);
+        }
       }
-      const first = uid[0];
-      let region = 'Unknown';
-      if (first === '6') region = 'America';
-      else if (first === '7') region = 'Europe';
-      else if (first === '8') region = 'Asia';
-      else if (first === '9') region = 'SAR (TW/HK/MO)';
-      else if (first === '1' || first === '2') region = 'China (Official)';
-      
-      badge.textContent = region;
-      badge.classList.remove('hidden');
+      throw new Error("Unable to retrieve showcase. Please ensure your UID is correct and 'Show Character Details' is enabled in your in-game profile.");
     }
 
-    async function fetchProfile() {
-      const input = document.getElementById('uidInput');
-      const uid = input.value.trim();
-      const fetchBtn = document.getElementById('fetchBtn');
-      const statusText = document.getElementById('statusIndicator');
+    // 3. UI HANDLER
+    async function loadProfile() {
+      const uid = document.getElementById("uidInput").value.trim();
+      const statusNotice = document.getElementById("statusNotice");
+      const fetchBtn = document.getElementById("fetchBtn");
 
       if (!uid || uid.length < 9) {
-        shakeInput(input);
+        showStatus("Please enter a valid 9-digit Honkai: Star Rail UID.", "error");
         return;
       }
 
-      // UI Loading state
       fetchBtn.disabled = true;
-      fetchBtn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Connecting...</span>`;
+      fetchBtn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Fetching...`;
       lucide.createIcons();
-      statusText.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span><span>Querying Mihomo Server...</span>`;
+      showStatus("Connecting to Star Rail servers via proxy gateway...", "info");
 
       try {
-        const targetUrl = `https://api.mihomo.me/sr_info_parsed/${uid}?lang=en`;
-        const response = await fetch(targetUrl, { mode: 'cors' });
-
-        if (!response.ok) {
-          throw new Error(`HTTP Error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        if (!data || !data.player) {
-          throw new Error('Showcase details hidden or empty');
-        }
-
-        // Process live API response
-        processParsedData(data);
-        statusText.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span><span>Connected via Live API</span>`;
-
+        const data = await fetchShowcase(uid);
+        renderProfile(data);
+        showStatus("Profile loaded successfully!", "success");
       } catch (err) {
-        console.warn('Direct live fetch bypassed due to CORS, rate limit, or hidden showcase. Activating synced high-fidelity simulated profile.', err);
-        statusText.innerHTML = `<span class="w-2 h-2 rounded-full bg-purple-400"></span><span>Showcase Synced (CORS Safeguard Active)</span>`;
-        // Load closest demo archetype based on first digit
-        if (uid.startsWith('6')) loadPreset('whale');
-        else if (uid.startsWith('7')) loadPreset('break');
-        else loadPreset('fua');
+        showStatus(err.message, "error");
       } finally {
         fetchBtn.disabled = false;
-        fetchBtn.innerHTML = `<i data-lucide="download-cloud" class="w-4 h-4"></i><span>Fetch Profile</span>`;
+        fetchBtn.innerHTML = `<i data-lucide="search" class="w-4 h-4"></i> Fetch`;
         lucide.createIcons();
       }
     }
 
-    function shakeInput(inputEl) {
-      inputEl.classList.add('border-red-500', 'ring-2', 'ring-red-500/50', 'animate-pulse');
-      setTimeout(() => {
-        inputEl.classList.remove('border-red-500', 'ring-2', 'ring-red-500/50', 'animate-pulse');
-      }, 1000);
+    function showStatus(msg, type) {
+      const box = document.getElementById("statusNotice");
+      box.classList.remove("hidden", "border-red-500", "border-yellow-500", "border-emerald-500", "text-red-400", "text-yellow-400", "text-emerald-400");
+      if (type === "error") {
+        box.classList.add("border-red-500", "text-red-400");
+      } else if (type === "info") {
+        box.classList.add("border-yellow-500", "text-yellow-400");
+      } else {
+        box.classList.add("border-emerald-500", "text-emerald-400");
+      }
+      box.textContent = msg;
     }
 
-    function loadPreset(presetKey) {
-      const preset = DEMO_PRESETS[presetKey];
-      if (!preset) return;
-      processParsedData(preset);
-      const uidField = document.getElementById('uidInput');
-      if (presetKey === 'whale') uidField.value = "600392110";
-      if (presetKey === 'break') uidField.value = "700441920";
-      if (presetKey === 'fua') uidField.value = "800333171";
-      detectRegion(uidField.value);
-    }
+    function renderProfile(data) {
+      const player = data.player;
+      document.getElementById("playerCard").classList.remove("hidden");
+      document.getElementById("playerName").textContent = player.nickname || "Trailblazer";
+      document.getElementById("playerInitial").textContent = (player.nickname || "T")[0].toUpperCase();
+      document.getElementById("playerDetails").textContent = `Trailblaze Level ${player.level} | World Level ${player.world_level || 0}`;
 
-    /* =====================================================================
-       4. DATA PARSER & SCORING CALCULATIONS
-       ===================================================================== */
-    function scoreSubstat(field, value, charName) {
-      const weights = STAT_WEIGHTS[charName] || { "CritRate": 1.0, "CritDMG": 1.0, "Speed": 1.0, "AttackAddedRatio": 0.75 };
-      const weight = weights[field] || 0.0;
-      const normalizer = STAT_NORMALIZERS[field] || 1.0;
-      const rolls = value / normalizer;
-      return {
-        weight: weight,
-        rollValue: rolls * weight
-      };
-    }
+      const firstDigit = String(player.uid)[0];
+      const regions = { "6": "NA", "7": "EU", "8": "Asia", "9": "SAR" };
+      document.getElementById("playerRegion").textContent = regions[firstDigit] || "Global";
 
-    function getTierBadge(score) {
-      if (score >= 5.0) return { label: 'WTF / OP', bg: 'bg-pink-500/20 text-pink-300 border-pink-500/40' };
-      if (score >= 4.1) return { label: 'SS', bg: 'bg-amber-500/20 text-amber-300 border-amber-500/40' };
-      if (score >= 3.2) return { label: 'S', bg: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/40' };
-      if (score >= 2.3) return { label: 'A', bg: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' };
-      if (score >= 1.5) return { label: 'B', bg: 'bg-sky-500/20 text-sky-300 border-sky-500/40' };
-      return { label: 'C', bg: 'bg-slate-700/40 text-slate-400 border-slate-600/40' };
-    }
+      currentCharacters = data.characters || [];
+      document.getElementById("charCount").textContent = currentCharacters.length;
 
-    function processParsedData(data) {
-      currentAccountData = data;
+      const grid = document.getElementById("characterGrid");
+      grid.innerHTML = "";
 
-      // Update Player Banner
-      const p = data.player;
-      document.getElementById('playerName').textContent = p.nickname || 'Trailblazer';
-      document.getElementById('playerLevel').textContent = p.level || 70;
-      document.getElementById('playerSignature').textContent = p.signature || 'May This Journey Lead Us Starward ✨';
-      document.getElementById('playerServer').textContent = p.server || 'Asia Server';
-      document.getElementById('playerAvatar').src = p.avatar?.icon || 'https://placehold.co/80x80/1a1e36/ffd166?text=TB';
-      document.getElementById('charCount').textContent = (data.characters || []).length;
-      document.getElementById('playerBanner').classList.remove('hidden');
-
-      // Populate Characters
-      renderCharacterRoster(data.characters || []);
-
-      // Auto-select first 4 characters for Team Builder
-      selectedTeamIndices = (data.characters || []).map((_, idx) => idx).slice(0, 4);
-      renderTeamSlots();
-      renderRosterSelectionTray();
-      evaluateTeamComposition();
-
-      lucide.createIcons();
-    }
-
-    /* =====================================================================
-       5. ROSTER & RELIC CARD RENDERING
-       ===================================================================== */
-    function renderCharacterRoster(characters) {
-      const container = document.getElementById('charactersGrid');
-      container.innerHTML = '';
-
-      if (!characters || characters.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full py-12 text-center text-slate-500">
-            <i data-lucide="ghost" class="w-12 h-12 mx-auto mb-2 opacity-50"></i>
-            <p>No characters visible in showcase. Verify profile settings in-game.</p>
-          </div>
-        `;
+      if (currentCharacters.length === 0) {
+        showStatus("Player found, but no characters are visible. Enable 'Show Character Details' in your Trailblazer Profile menu.", "error");
         return;
       }
 
-      characters.forEach((char, idx) => {
-        // Calculate average roll score
-        const relics = char.relics || [];
-        const totalRolls = relics.reduce((acc, r) => acc + (r.score || 0), 0);
-        const avgRolls = relics.length > 0 ? (totalRolls / relics.length).toFixed(1) : "0.0";
-        const tier = getTierBadge(parseFloat(avgRolls));
-
-        const card = document.createElement('div');
-        card.className = "glass-card rounded-2xl p-4 cursor-pointer hover:border-hsr-gold/50 transition duration-300 relative group overflow-hidden flex flex-col justify-between";
-        card.onclick = () => openRelicModal(idx);
-
+      currentCharacters.forEach((char, idx) => {
+        const card = document.createElement("button");
+        card.className = "glass-card p-3 rounded-xl border border-slate-800 hover:border-yellow-400 transition flex flex-col items-center text-center gap-1.5 focus:border-yellow-400";
+        card.onclick = () => inspectCharacter(idx);
         card.innerHTML = `
-          <div class="absolute top-0 right-0 w-28 h-28 bg-gradient-to-br from-transparent to-yellow-500/10 pointer-events-none rounded-bl-full"></div>
-          
-          <div>
-            <div class="flex items-start justify-between mb-3">
-              <div class="relative">
-                <img src="${char.icon}" alt="${char.name}" class="w-16 h-16 rounded-xl border border-hsr-border object-cover bg-slate-900 group-hover:scale-105 transition" onerror="this.src='https://placehold.co/120x120/1a1e36/ffd166?text=${char.name}'"/>
-                <span class="absolute -bottom-2 -left-1 text-[10px] font-bold px-1.5 py-0.2 rounded bg-purple-950 border border-purple-400 text-purple-200">
-                  E${char.rank ?? 0}
-                </span>
-              </div>
-              <div class="text-right">
-                <span class="text-[10px] font-mono px-2 py-0.5 rounded border ${tier.bg} uppercase font-bold tracking-wider">
-                  ${tier.label}
-                </span>
-                <p class="text-[11px] text-slate-400 mt-1 font-mono">${avgRolls} RV / slot</p>
-              </div>
-            </div>
-
-            <h4 class="font-bold text-white text-base truncate">${char.name}</h4>
-            <div class="flex items-center gap-2 text-xs text-slate-400 mt-0.5">
-              <span>Lvl ${char.level}</span>
-              <span>•</span>
-              <span class="text-hsr-cyan truncate">${char.path?.name || 'Path'}</span>
-            </div>
-
-            <!-- Light Cone info -->
-            <div class="mt-3 p-2 rounded-lg bg-hsr-dark/60 border border-slate-800 text-xs flex items-center gap-2">
-              <i data-lucide="shield" class="w-3.5 h-3.5 text-hsr-gold shrink-0"></i>
-              <span class="text-slate-300 truncate">${char.light_cone?.name || 'Signature Weapon'}</span>
-              <span class="text-hsr-gold text-[10px] font-bold ml-auto shrink-0">S${char.light_cone?.rank || 1}</span>
-            </div>
+          <div class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center font-bold text-yellow-400 border border-slate-700">
+            ${char.name[0]}
           </div>
-
-          <!-- Relic Quick Slot Dots -->
-          <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
-            <span>Relics (${relics.length}/6)</span>
-            <div class="flex items-center gap-1">
-              ${[0,1,2,3,4,5].map(i => {
-                const filled = relics[i] !== undefined;
-                return `<span class="w-2 h-2 rounded-full ${filled ? 'bg-amber-400' : 'bg-slate-700'}"></span>`;
-              }).join('')}
-            </div>
-          </div>
+          <span class="text-xs font-semibold text-white truncate w-full">${char.name}</span>
+          <span class="text-[10px] text-slate-400">Lv ${char.level}</span>
         `;
-        container.appendChild(card);
+        grid.appendChild(card);
       });
+
+      // Automatically inspect first character & analyze first 4 slots as team
+      inspectCharacter(0);
+      evaluateTeam(currentCharacters.slice(0, 4));
     }
 
-    /* =====================================================================
-       6. RELIC MODAL & STAT BREAKDOWN
-       ===================================================================== */
-    function openRelicModal(charIndex) {
-      if (!currentAccountData || !currentAccountData.characters[charIndex]) return;
-      const char = currentAccountData.characters[charIndex];
+    function scoreRelic(relic, charName) {
+      const weights = STAT_WEIGHTS[charName] || { "CritRate": 1.0, "CritDMG": 1.0, "Speed": 1.0, "AttackAddedRatio": 0.75 };
+      let rolls = 0;
+      (relic.sub_affix || []).forEach(sub => {
+        const norm = STAT_NORMALIZERS[sub.field] || 1.0;
+        const w = weights[sub.field] || 0.0;
+        rolls += (sub.value / norm) * w;
+      });
+      return parseFloat(rolls.toFixed(2));
+    }
 
-      document.getElementById('modalCharAvatar').src = char.icon;
-      document.getElementById('modalCharName').textContent = char.name;
-      document.getElementById('modalCharEidolon').textContent = `E${char.rank ?? 0}`;
-      document.getElementById('modalCharPath').textContent = `${char.path?.name} • ${char.element?.name || 'Unknown'}`;
+    function inspectCharacter(idx) {
+      const char = currentCharacters[idx];
+      if (!char) return;
 
+      const container = document.getElementById("relicContainer");
+      container.classList.remove("hidden");
+      document.getElementById("inspectName").textContent = char.name;
+      document.getElementById("inspectPath").textContent = `${char.path?.name || "Path"} • Lvl ${char.level}`;
+
+      const list = document.getElementById("relicList");
+      list.innerHTML = "";
+
+      let totalScore = 0;
       const relics = char.relics || [];
-      const totalScore = relics.reduce((sum, r) => sum + (r.score || 0), 0);
-      const overallTier = getTierBadge(relics.length ? (totalScore / relics.length) : 0);
 
-      document.getElementById('modalBuildTier').textContent = `${overallTier.label} (${totalScore.toFixed(1)} RV)`;
-      document.getElementById('modalBuildTier').className = `text-xl font-black ${overallTier.label === 'WTF / OP' ? 'text-pink-400' : 'text-hsr-gold'}`;
-
-      const listContainer = document.getElementById('modalRelicsList');
-      listContainer.innerHTML = '';
-
-      const slotNames = ["Head", "Hands", "Body", "Feet", "Planar Sphere", "Link Rope"];
-
-      relics.forEach((r, idx) => {
-        const slotTitle = slotNames[idx] || `Relic #${idx + 1}`;
-        const tier = getTierBadge(r.score || 0);
-
-        const row = document.createElement('div');
-        row.className = "pt-3 first:pt-0";
-        row.innerHTML = `
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="text-xs font-bold text-hsr-gold uppercase font-mono">${slotTitle}</span>
-                <span class="text-xs text-white font-medium truncate">${r.name}</span>
-              </div>
-              <p class="text-xs text-slate-400">Main Stat: <strong class="text-slate-200">${r.main_affix?.name} (+${r.main_affix?.display})</strong></p>
-            </div>
-            <div class="flex items-center gap-2 self-start sm:self-auto">
-              <span class="text-xs px-2.5 py-0.5 rounded border ${tier.bg} font-mono font-bold">${tier.label}</span>
-              <span class="text-xs font-mono text-slate-300">${(r.score || 0).toFixed(1)} Rolls</span>
-            </div>
+      relics.forEach(r => {
+        const score = scoreRelic(r, char.name);
+        totalScore += score;
+        const item = document.createElement("div");
+        item.className = "bg-slate-900/80 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs";
+        item.innerHTML = `
+          <div>
+            <div class="font-semibold text-slate-200">${r.name}</div>
+            <div class="text-[10px] text-slate-400">${r.main_affix?.name || "Main Stat"}: ${r.main_affix?.display || ""}</div>
           </div>
-
-          <!-- Substats Pill Grid -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-            ${(r.sub_affix || []).map(s => {
-              const isUseful = (s.weight || 0) > 0;
-              return `
-                <div class="p-2 rounded-lg ${isUseful ? 'bg-amber-950/30 border border-amber-500/30 text-amber-200' : 'bg-slate-800/50 border border-slate-700/50 text-slate-400'}">
-                  <div class="flex justify-between items-center text-[11px]">
-                    <span class="truncate">${s.name}</span>
-                    <strong class="font-mono">${s.display}</strong>
-                  </div>
-                  <div class="text-[10px] text-slate-400 flex justify-between mt-1 pt-1 border-t border-slate-700/40">
-                    <span>Eff: ${(s.weight || 0) * 100}%</span>
-                    <span class="font-mono text-hsr-cyan">+${(s.roll_val || 0).toFixed(1)}</span>
-                  </div>
-                </div>
-              `;
-            }).join('')}
+          <div class="text-right">
+            <div class="font-bold text-amber-400">${score} RV</div>
+            <div class="text-[10px] ${score >= 4 ? 'text-emerald-400' : 'text-slate-500'}">${score >= 4 ? 'Great' : 'Normal'}</div>
           </div>
         `;
-        listContainer.appendChild(row);
+        list.appendChild(item);
       });
 
-      const modal = document.getElementById('relicModal');
-      modal.classList.remove('hidden');
-      setTimeout(() => {
-        modal.classList.remove('opacity-0');
-      }, 10);
-      lucide.createIcons();
+      const avg = relics.length > 0 ? (totalScore / relics.length).toFixed(1) : "0.0";
+      document.getElementById("inspectAvgScore").textContent = `${avg} RV`;
     }
 
-    function closeModal() {
-      const modal = document.getElementById('relicModal');
-      modal.classList.add('opacity-0');
-      setTimeout(() => {
-        modal.classList.add('hidden');
-      }, 300);
-    }
-
-    /* =====================================================================
-       7. TEAM BUILDER & SYNERGY ALGORITHM
-       ===================================================================== */
-    function toggleTeamMember(charIndex) {
-      const existsIdx = selectedTeamIndices.indexOf(charIndex);
-      if (existsIdx > -1) {
-        // Remove if more than 1
-        if (selectedTeamIndices.length > 1) {
-          selectedTeamIndices.splice(existsIdx, 1);
-        }
-      } else {
-        if (selectedTeamIndices.length < 4) {
-          selectedTeamIndices.push(charIndex);
-        } else {
-          // Replace last slot
-          selectedTeamIndices[3] = charIndex;
-        }
-      }
-      renderTeamSlots();
-      renderRosterSelectionTray();
-      evaluateTeamComposition();
-    }
-
-    function renderTeamSlots() {
-      const container = document.getElementById('teamSlotsContainer');
-      container.innerHTML = '';
-
-      for (let i = 0; i < 4; i++) {
-        const charIdx = selectedTeamIndices[i];
-        const char = currentAccountData?.characters[charIdx];
-
-        const slot = document.createElement('div');
-        slot.className = "glass-card rounded-xl p-3 border border-slate-700 flex flex-col items-center justify-center text-center relative min-h-[140px]";
-
-        if (char) {
-          slot.innerHTML = `
-            <button onclick="toggleTeamMember(${charIdx})" class="absolute top-1.5 right-1.5 text-slate-400 hover:text-red-400 p-1">
-              <i data-lucide="x" class="w-3.5 h-3.5"></i>
-            </button>
-            <img src="${char.icon}" class="w-14 h-14 rounded-xl border border-hsr-gold object-cover bg-slate-900 shadow-neon-gold mb-2"/>
-            <h5 class="text-xs font-bold text-white truncate max-w-full">${char.name}</h5>
-            <span class="text-[10px] text-hsr-cyan">${char.path?.name}</span>
-          `;
-        } else {
-          slot.innerHTML = `
-            <div class="w-12 h-12 rounded-xl border-2 border-dashed border-slate-700 flex items-center justify-center mb-2 text-slate-500">
-              <i data-lucide="plus" class="w-5 h-5"></i>
-            </div>
-            <span class="text-xs text-slate-500">Empty Slot</span>
-          `;
-        }
-        container.appendChild(slot);
-      }
-      lucide.createIcons();
-    }
-
-    function renderRosterSelectionTray() {
-      const tray = document.getElementById('rosterSelectionTray');
-      tray.innerHTML = '';
-
-      if (!currentAccountData?.characters) return;
-
-      currentAccountData.characters.forEach((char, idx) => {
-        const isSelected = selectedTeamIndices.includes(idx);
-        const pill = document.createElement('button');
-        pill.onclick = () => toggleTeamMember(idx);
-        pill.className = `px-3 py-1.5 rounded-xl text-xs flex items-center gap-2 border transition ${
-          isSelected 
-            ? 'bg-amber-500/20 border-hsr-gold text-amber-200 shadow-neon-gold' 
-            : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-500'
-        }`;
-        pill.innerHTML = `
-          <img src="${char.icon}" class="w-4 h-4 rounded-full object-cover"/>
-          <span>${char.name}</span>
-          ${isSelected ? '<i data-lucide="check" class="w-3 h-3 text-hsr-gold"></i>' : ''}
-        `;
-        tray.appendChild(pill);
+    function evaluateTeam(team) {
+      const slots = document.getElementById("teamSlots");
+      slots.innerHTML = "";
+      team.forEach(c => {
+        const el = document.createElement("div");
+        el.className = "p-2 rounded-lg bg-slate-900/90 border border-yellow-500/30 text-white font-medium truncate";
+        el.textContent = c.name;
+        slots.appendChild(el);
       });
-      lucide.createIcons();
-    }
 
-    function evaluateTeamComposition() {
-      if (!currentAccountData) return;
-      const team = selectedTeamIndices.map(idx => currentAccountData.characters[idx]).filter(Boolean);
-
-      let score = 70;
-      let notes = [];
-      let archetype = "Standard Hypercarry";
-      let spEconomy = "+0.5 Neutral";
-      let sustainRating = "Safe";
-
-      const names = team.map(c => c.name);
       const paths = team.map(c => c.path?.name || "");
+      const sustains = paths.filter(p => p === "Preservation" || p === "Abundance").length;
+      const dps = paths.filter(p => ["The Hunt", "Erudition", "Destruction"].includes(p)).length;
 
-      const dpsPaths = ["The Hunt", "Erudition", "Destruction"];
-      const sustainPaths = ["Preservation", "Abundance"];
-      const supportPaths = ["Harmony", "Nihility"];
+      let score = 90;
+      const notes = [];
 
-      const dpsCount = paths.filter(p => dpsPaths.includes(p)).length;
-      const sustainCount = paths.filter(p => sustainPaths.includes(p)).length;
-      const supportCount = paths.filter(p => supportPaths.includes(p)).length;
-
-      // Archetype Detection
-      if (names.includes("Firefly") || names.includes("Boothill") || names.includes("Rappa")) {
-        archetype = "Super Break";
-        if (names.includes("Ruan Mei")) {
-          score += 15;
-          notes.push("⭐ Prime Synergy: Ruan Mei provides 50% Break Efficiency & Weakness Break Extension for Super Break!");
-        }
-        if (names.includes("Gallagher") || names.includes("Lingsha")) {
-          score += 10;
-          notes.push("🔥 Synergistic Break Sustain: High Toughness reduction alongside Break Vulnerability.");
-        }
-      } else if (names.includes("Acheron")) {
-        archetype = "Acheron Slasher";
-        const nihilityCount = team.filter(c => c.path?.name === "Nihility" && c.name !== "Acheron").length;
-        if (nihilityCount >= 2) {
-          score += 20;
-          notes.push("⚡ Maximum Crimson Knot: 2 Nihility teammates fully activate Acheron's Abyss 160% multiplier trace!");
-        } else if (nihilityCount === 1) {
-          score += 8;
-          notes.push("⚠️ Moderate Abyss Trace: Only 1 Nihility partner (115% multiplier). Consider adding Jiaoqiu, Pela, or Silver Wolf.");
-        } else {
-          score -= 15;
-          notes.push("❌ Acheron Passive Inactive: Lacking Nihility allies severely hinders Ultimate energy cycle.");
-        }
-      } else if (names.includes("Feixiao") || names.includes("Dr. Ratio") || names.includes("Topaz")) {
-        archetype = "Follow-Up Attack (FUA)";
-        if (names.includes("Robin")) {
-          score += 15;
-          notes.push("🎶 Concert Maestro: Robin's Concerto procs on every single follow-up strike for massive bonus DMG.");
-        }
-        if (names.includes("Aventurine")) {
-          score += 10;
-          notes.push("🎲 Blind Bet Acceleration: Frequent ally follow-ups constantly charge Aventurine's coin shield!");
-        }
-      } else if (names.includes("Kafka") || names.includes("Black Swan")) {
-        archetype = "DoT Detonation";
-        if (names.includes("Kafka") && names.includes("Black Swan")) {
-          score += 20;
-          notes.push("💀 Arcana Proliferation: Kafka reliably detonates Black Swan's high-stack Arcana stacks.");
-        }
-      }
-
-      // Sustain Check
-      if (sustainCount === 0) {
+      if (sustains === 0) {
         score -= 25;
-        sustainRating = "High Risk / 0-Cycle Only";
-        notes.push("🛡️ No Sustain Unit: High survivability peril unless attempting a specialized 0-Cycle Clear.");
-      } else if (sustainCount > 1) {
-        score -= 10;
-        sustainRating = "Overprotected (Dual Sustain)";
-        notes.push("🛡️ Dual Sustain: High comfort, but sacrifices damage amplification in turn-limited modes (MoC / AS).");
-      }
-
-      // SP Economy
-      if (names.includes("Sparkle")) {
-        spEconomy = "Super Abundant (+3 SP Surge)";
-      } else if (dpsCount >= 3) {
-        spEconomy = "Extremely Starved (-1.8 / turn)";
-        score -= 15;
-        notes.push("⚡ Skill Point Bottleneck: 3 simultaneous Carries will fight for Skill Points each round.");
-      } else if (names.includes("Dan Heng • Imbibitor Lunae") && !names.includes("Sparkle")) {
-        spEconomy = "Very Heavy (-2.0 / turn)";
-        notes.push("💧 DHIL requires 3 SP per basic attack. Recommended to pair with Sparkle or Tingyun.");
-      }
-
-      // Compute Relic score average of the team
-      const allRelicScores = team.flatMap(c => (c.relics || []).map(r => r.score || 0));
-      const avgScore = allRelicScores.length ? (allRelicScores.reduce((a, b) => a + b, 0) / allRelicScores.length) : 0;
-      const overallRelicTier = getTierBadge(avgScore);
-
-      // Clamp score
-      const finalScore = Math.min(100, Math.max(25, score));
-
-      // Render Results
-      document.getElementById('teamScoreNumber').textContent = finalScore;
-      document.getElementById('teamScoreBar').style.width = `${finalScore}%`;
-      document.getElementById('teamArchetypeTag').textContent = archetype;
-      document.getElementById('teamAvgRelicTier').textContent = `${overallRelicTier.label} (${avgScore.toFixed(2)} Avg RV)`;
-      document.getElementById('teamSPEconomy').textContent = spEconomy;
-      document.getElementById('teamSustainRating').textContent = sustainRating;
-
-      const feedbackContainer = document.getElementById('teamFeedbackList');
-      feedbackContainer.innerHTML = '';
-      if (notes.length === 0) {
-        notes.push("Balanced composition: Core damage dealer, supportive buffers, and reliable survivability.");
-      }
-      notes.forEach(n => {
-        const item = document.createElement('div');
-        item.className = "p-3 rounded-xl bg-hsr-dark/60 border border-slate-800 text-xs text-slate-300 flex items-start gap-2.5";
-        item.innerHTML = `<i data-lucide="check-circle-2" class="w-4 h-4 text-hsr-gold shrink-0 mt-0.5"></i><span>${n}</span>`;
-        feedbackContainer.appendChild(item);
-      });
-
-      // Speed Tuning Suggestion
-      const speedAdviceEl = document.getElementById('speedTuningAdvice');
-      speedAdviceEl.innerHTML = `
-        <strong>Recommended Turn Order:</strong> 
-        1. Fast Debuffer/Buffer (160+ or 143+ SPD) → 
-        2. Advance Harmony/Robin (134 SPD) → 
-        3. Primary DPS (ATK% or 134 Breakpoint) → 
-        4. Sustain (Gallagher/Aventurine 143+ SPD for SP generation).
-      `;
-
-      lucide.createIcons();
-    }
-
-    /* =====================================================================
-       8. TAB SWITCHING & EXPORT UTILITIES
-       ===================================================================== */
-    function switchMainTab(tab) {
-      const rosterBtn = document.getElementById('tabRosterBtn');
-      const teamBtn = document.getElementById('tabTeamBtn');
-      const rosterView = document.getElementById('rosterView');
-      const teamView = document.getElementById('teamView');
-
-      if (tab === 'roster') {
-        rosterBtn.className = "px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 bg-hsr-gold text-black shadow-sm transition";
-        teamBtn.className = "px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 text-slate-300 hover:text-white transition";
-        rosterView.classList.remove('hidden');
-        teamView.classList.add('hidden');
+        notes.push("Missing a defensive sustain unit (Abundance/Preservation). Vulnerable in high MoC/AS stages.");
+      } else if (sustains === 1) {
+        notes.push("Ideal solo-sustain composition. Maximum damage buffer room.");
       } else {
-        teamBtn.className = "px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 bg-hsr-cyan text-black shadow-sm transition";
-        rosterBtn.className = "px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 text-slate-300 hover:text-white transition";
-        teamView.classList.remove('hidden');
-        rosterView.classList.add('hidden');
+        score -= 10;
+        notes.push("Running multiple sustains lowers your overall team DPS ceiling.");
       }
-      lucide.createIcons();
+
+      if (dps === 1) {
+        notes.push("Hypercarry structure detected. Ensure your supports tune action value ahead of carry.");
+      } else if (dps >= 3) {
+        score -= 20;
+        notes.push("High Skill Point (SP) competition: Multiple primary carries without dedicated battery support.");
+      }
+
+      document.getElementById("teamScore").textContent = `${Math.max(score, 20)}%`;
+      const noteList = document.getElementById("teamNotes");
+      noteList.innerHTML = notes.map(n => `<li>${n}</li>`).join("");
     }
-
-    function copyTeamSummary() {
-      if (!currentAccountData) return;
-      const teamNames = selectedTeamIndices.map(idx => currentAccountData.characters[idx]?.name).filter(Boolean);
-      const score = document.getElementById('teamScoreNumber').textContent;
-      const archetype = document.getElementById('teamArchetypeTag').textContent;
-      const text = `Honkai: Star Rail Team Analysis [${archetype} - ${score}/100]\nLineup: ${teamNames.join(', ')}\nGenerated with Astral Relic Scorer`;
-
-      // Fallback copy using textarea
-      const el = document.createElement('textarea');
-      el.value = text;
-      document.body.appendChild(el);
-      el.select();
-      document.execCommand('copy');
-      document.body.removeChild(el);
-
-      const btnText = document.getElementById('copyBtnText');
-      const old = btnText.textContent;
-      btnText.textContent = "Copied to Clipboard!";
-      setTimeout(() => {
-        btnText.textContent = old;
-      }, 2000);
-    }
-
-    // Initialize default demo profile on window load
-    window.onload = function() {
-      loadPreset('whale');
-      lucide.createIcons();
-    };
   </script>
 </body>
 </html>
