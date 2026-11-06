@@ -151,62 +151,33 @@
       "Boothill": { "BreakDamageAddedRatioBase": 1.0, "Speed": 1.0, "CritRate": 0.5 },
       "Robin": { "AttackAddedRatio": 1.0, "Speed": 0.75, "HPAddedRatio": 0.5 },
       "Ruan Mei": { "BreakDamageAddedRatioBase": 1.0, "Speed": 1.0, "HPAddedRatio": 0.5 },
-      "Aventurine": { "DefAddedRatio": 1.0, "CritDMG": 0.75, "Speed": 0.75 }
+      "Aventurine": { "DefAddedRatio": 1.0, "CritDMG": 0.75, "Speed": 0.75 },
+      "Silver Wolf": { "StatusProbabilityBase": 1.0, "Speed": 1.0, "CritRate": 0.75, "CritDMG": 0.75, "AttackAddedRatio": 0.5 },
+      "Sparkle": { "CritDMG": 1.0, "Speed": 1.0, "HPAddedRatio": 0.5, "DefAddedRatio": 0.5 }
     };
 
     let currentCharacters = [];
 
-    // 2. LIVE SHOWCASE FETCHER
+    // 2. LIVE SHOWCASE FETCHER POWERED BY YOUR CLOUDFLARE WORKER
     async function fetchShowcase(uid) {
       const cleanUid = uid.toString().trim();
+      
+      // Your Cloudflare Worker proxy endpoint
+      const workerBase = "https://fancy-wind-0bb0.cmeqiku.workers.dev";
+      const targetApi = `https://api.mihomo.me/sr_info_parsed/${cleanUid}?lang=en`;
+      const requestUrl = `${workerBase}/?url=${encodeURIComponent(targetApi)}`;
 
-      // Primary gateway: Enka HSR API (CORS enabled for browsers)
-      // Fallback gateway: Mihomo via reliable raw proxy
-      const gateways = [
-        {
-          url: `https://api.mihomo.me/sr_info_parsed/${cleanUid}?lang=en`,
-          parser: (json) => json
-        },
-        {
-          url: `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://api.mihomo.me/sr_info_parsed/${cleanUid}?lang=en`)}`,
-          parser: (json) => json
-        }
-      ];
-
-      for (const gw of gateways) {
-        try {
-          const controller = new AbortController();
-          const timeout = setTimeout(() => controller.abort(), 7000);
-
-          const res = await fetch(gw.url, { 
-            signal: controller.signal,
-            headers: { 'Accept': 'application/json' }
-          });
-          clearTimeout(timeout);
-
-          if (!res.ok) continue;
-
-          let raw = await res.json();
-          let data = gw.parser(raw);
-
-          // Handle stringified contents if passed via an origin wrapper
-          if (data && typeof data === 'string') {
-            data = JSON.parse(data);
-          } else if (data && data.contents && typeof data.contents === 'string') {
-            data = JSON.parse(data.contents);
-          }
-
-          if (data && data.player) {
-            return data;
-          }
-        } catch (e) {
-          console.warn("Gateway attempt failed, proceeding to next...", e);
-        }
+      const res = await fetch(requestUrl);
+      if (!res.ok) {
+        throw new Error(`Proxy error (${res.status}). Verify the UID is active on server.`);
       }
 
-      throw new Error(
-        "Could not load account details. Ensure your UID is valid and 'Show Character Details' is toggled ON in your in-game Trailblazer profile."
-      );
+      const data = await res.json();
+      if (!data || !data.player) {
+        throw new Error("Could not load account details. Make sure the UID is correct and your profile showcase is public.");
+      }
+
+      return data;
     }
 
     // 3. UI HANDLER
@@ -223,7 +194,7 @@
       fetchBtn.disabled = true;
       fetchBtn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Fetching...`;
       lucide.createIcons();
-      showStatus("Connecting to game servers and fetching showcase...", "info");
+      showStatus("Connecting to game servers via your Cloudflare Worker...", "info");
 
       try {
         const data = await fetchShowcase(uid);
